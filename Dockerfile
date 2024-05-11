@@ -2,17 +2,20 @@
 FROM python:3.12-slim
 LABEL authors="Adam"
 
+# Setup non root user
+RUN groupadd -r myusergroup && useradd -r -g myusergroup -u 1001 myuser
+
 # Set app workdir
 WORKDIR /app
-ADD . /app
+# copy py_files + requirements in with making the new user as the owner
+COPY --chown=myuser:myusergroup . /app
 
 # Setup env
-RUN pip install --trusted-host pypi.python.org -r requirements.txt
-EXPOSE 8000
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Tell python that its running in docker to look in specific paths
-ENV RUNNING_IN_DOCKER true
 ENV NAME LogParser
+# Switch the user to the new user
+USER myuser
 
 # Run it
 ENTRYPOINT ["python", "Parser.py"]
