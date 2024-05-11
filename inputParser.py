@@ -50,6 +50,10 @@ class InputParse:
             raise PermissionError('Unable to read [Permission Denied]: \n' + "\n".join(not_readable))
 
         try:
+            # Remove output file if it exists without promoting the user
+            if os.path.exists(args.outputFilePath):
+                os.remove(args.outputFilePath)
+            # check if the file will be writable
             open(args.outputFilePath, "w")
         except PermissionError:
             raise PermissionError(f"Write permissions denied for {args.outputFilePath}")
