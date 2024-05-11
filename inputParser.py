@@ -78,7 +78,7 @@ class InputParse:
             # handling if required
             logging.warning(f"Bad Line {line}")
 
-        data = pd.read_csv(file, sep='\\s+', on_bad_lines=handle_bad_line, engine='python')
+        data = pd.read_csv(file, sep='\\s+', on_bad_lines=handle_bad_line, engine='python', header=None)
         # cleaning here if required
         return data
 
