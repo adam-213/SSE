@@ -48,7 +48,10 @@ class InputParse:
             raise FileNotFoundError("\n".join(not_found))
         if not_readable:
             raise PermissionError('Unable to read [Permission Denied]: \n' + "\n".join(not_readable))
-        if not os.access(args.outputFilePath[0], os.W_OK):
+
+        try:
+            open(args.outputFilePath, "w")
+        except PermissionError:
             raise PermissionError(f"Write permissions denied for {args.outputFilePath}")
 
     def load_files(self, files: list):
